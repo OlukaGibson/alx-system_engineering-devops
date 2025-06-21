@@ -1,0 +1,32 @@
+[User] --> www.foobar.com --> DNS (A record: www → 8.8.8.8) --> [Server (8.8.8.8)]
+    └─> Nginx (Web Server)
+        └─> App Server (e.g., Gunicorn)
+            └─> App Files (Codebase)
+                └─> MySQL (Database)
+
+
+Components Explanation:
+
+Server: A physical/virtual machine hosting all components.
+
+Domain Name: Human-readable address (foobar.com) pointing to IP (8.8.8.8).
+
+DNS Record: The www in www.foobar.com is an A record pointing to the server’s IP.
+
+Web Server (Nginx): Handles HTTP requests and forwards them to the application server.
+
+Application Server: Runs the app logic (e.g., Python, Node.js).
+
+App Files: The actual backend code (e.g., Django, Flask).
+
+Database (MySQL): Stores persistent data.
+
+Communication: Happens over HTTP (and TCP/IP stack).
+
+Issues:
+
+SPOF (Single Point of Failure): One server fails = whole site down.
+
+Downtime during deployment: Restarting web server interrupts service.
+
+Scalability: Can’t handle high traffic on one server.

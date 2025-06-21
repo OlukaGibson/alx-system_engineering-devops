@@ -1,0 +1,36 @@
+       [User] -- HTTPS --> [HAProxy Load Balancer] --|
+          |                                         |
+        Firewall                                   Firewall
+          |                                         |
+   +------+------+,                          +------+------+
+   | Web Server  |                          | Web Server  |
+   | App Server  |                          | App Server  |
+   | Monitoring  |                          | Monitoring  |
+   +------+------+                          +------+------+
+          |                                         |
+          +--------------------+-------------------+
+                               |
+                             Firewall
+                               |
+                             MySQL
+                          + Monitoring
+
+Additions & Purpose:
+
+3 Firewalls: One for each entry point (LB, servers, DB). Control access.
+
+SSL Certificate: Enables HTTPS — encrypts data in transit.
+
+Monitoring Clients: Use something like Sentry, Sumologic, or Prometheus.
+
+Collect logs, QPS (Queries per second), memory, uptime, etc.
+
+To monitor QPS: Enable access logging, configure monitoring agent to parse logs.
+
+Security & Monitoring Issues:
+
+SSL Termination at Load Balancer: If traffic isn’t encrypted to backend, it’s a risk.
+
+Single MySQL (write-only): Still a SPOF.
+
+All-in-one servers: No isolation = harder scaling, more security risk.
