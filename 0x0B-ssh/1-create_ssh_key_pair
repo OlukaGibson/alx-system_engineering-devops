@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Creates RSA 4096-bit SSH key pair named 'school' with passphrase 'betty'
+
+ssh-keygen -t rsa -b 4096 -f school -N betty
+#!/usr/bin/env bash
+# Connects to server using ~/.ssh/school private key and ubuntu user
+
+ssh -i ~/.ssh/school ubuntu@"$1"
