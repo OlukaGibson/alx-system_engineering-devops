@@ -1,0 +1,46 @@
+
+                +---------------+
+                | Load Balancer | (HAProxy)
+                +-------+-------+
+                        |
+        +---------------+---------------+
+        |                               |
+  +-----+-----+                   +-----+-----+
+  | Web Server|                   | Web Server|
+  | (Nginx)   |                   | (Nginx)   |
+  | App Server|                   | App Server|
+  +-----+-----+                   +-----+-----+
+        |                               |
+        +---------------+---------------+
+                        |
+                  +-----+-----+
+                  |   MySQL   |
+                  +-----------+
+
+Additions & Purpose:
+
+HAProxy Load Balancer: Distributes requests between 2 servers.
+
+Algorithm: Round Robin (or Least Connections, etc.)
+
+Active-Passive: One server can go down without total failure.
+
+Redundant App Servers: Better performance, handles more users.
+
+MySQL: Still one DB instance.
+
+Database Insight:
+
+A Primary-Replica setup (Master-Slave) is better:
+
+Primary Node: Accepts writes and updates.
+
+Replica Node(s): Read-only copies for load balancing.
+
+Issues:
+
+SPOF: The database and load balancer are still SPOFs.
+
+Security: No HTTPS or firewall.
+
+Monitoring: None, so issues may go unnoticed.
