@@ -1,0 +1,27 @@
+global
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    chroot /var/lib/haproxy
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+    ssl-default-bind-options no-sslv3
+    ssl-default-bind-ciphers PROFILE=SYSTEM
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+
+frontend https-in
+    bind *:443 ssl crt /etc/letsencrypt/live/yourdomain.com/fullchain.pem crt /etc/letsencrypt/live/yourdomain.com/privkey.pem
+    default_backend servers
+
+backend servers
+    server web-01 web-01-IP:80 check
+    server web-02 web-02-IP:80 check
