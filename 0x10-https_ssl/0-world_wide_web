@@ -1,21 +1,27 @@
 #!/usr/bin/env bash
-# This script displays DNS A record info for subdomains
+# Retrieves and displays the A record for specified subdomains
 
 domain="$1"
 subdomain="$2"
 
-get_record() {
-    sub="$1"
-    ip=$(dig +short "$sub.$domain")
-    if [[ -n "$ip" ]]; then
-        echo "The subdomain $sub is a A record and points to $ip"
+lookup_record() {
+    local sub=$1
+    # Use dig to get A record, then extract the first A line
+    record=$(dig "${sub}.${domain}" +short | head -n1)
+    if [[ -n "$record" ]]; then
+        echo "The subdomain ${sub} is a A record and points to ${record}"
     fi
 }
 
+if [[ -z "$domain" ]]; then
+    echo "Usage: $0 domain [subdomain]"
+    exit 1
+fi
+
 if [[ -z "$subdomain" ]]; then
-    for sub in www lb-01 web-01 web-02; do
-        get_record "$sub"
+    for s in www lb-01 web-01 web-02; do
+        lookup_record "$s"
     done
 else
-    get_record "$subdomain"
+    lookup_record "$subdomain"
 fi
