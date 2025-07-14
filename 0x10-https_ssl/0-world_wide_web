@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# Retrieves and displays the A record for specified subdomains
+# Retrieves and displays the A record type and destination for subdomains
 
 domain="$1"
 subdomain="$2"
 
 lookup_record() {
-    local sub=$1
-    # Use dig to get A record, then extract the first A line
-    record=$(dig "${sub}.${domain}" +short | head -n1)
-    if [[ -n "$record" ]]; then
-        echo "The subdomain ${sub} is a A record and points to ${record}"
-    fi
+    local sub="$1"
+    dig "${sub}.${domain}" | awk -v s="${sub}" '
+        $1 == s "." domain "." && $4 == "A" {
+            printf "The subdomain %s is a %s record and points to %s\n", s, $4, $5
+        }
+    ' domain="${domain}"
 }
 
 if [[ -z "$domain" ]]; then
