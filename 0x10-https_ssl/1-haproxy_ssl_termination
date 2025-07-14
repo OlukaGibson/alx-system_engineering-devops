@@ -7,7 +7,7 @@ global
     group haproxy
     daemon
     ssl-default-bind-options no-sslv3
-    ssl-default-bind-ciphers PROFILE=SYSTEM
+    ssl-default-bind-ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256
 
 defaults
     log     global
@@ -19,9 +19,8 @@ defaults
     timeout server  50000
 
 frontend https-in
-    bind *:443 ssl crt /etc/letsencrypt/live/yourdomain.com/fullchain.pem crt /etc/letsencrypt/live/yourdomain.com/privkey.pem
+    bind *:443 ssl crt /etc/ssl/private/haproxy.pem
     default_backend servers
 
 backend servers
-    server web-01 web-01-IP:80 check
-    server web-02 web-02-IP:80 check
+    server web1 127.0.0.1:80 check
