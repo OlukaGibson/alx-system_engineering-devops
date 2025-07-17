@@ -1,0 +1,17 @@
+# Monitor Metrics in Datadog
+
+Two monitors were created in Datadog:
+
+1. **Disk Reads per Second**
+   - Metric: `system.io.r_s`
+   - Condition: Above `100` for the last `5 minutes`.
+   - Alert Type: Warning/Alert.
+
+2. **Disk Writes per Second**
+   - Metric: `system.io.w_s`
+   - Condition: Above `100` for the last `5 minutes`.
+   - Alert Type: Warning/Alert.
+
+Both monitors were configured via the Datadog dashboard:
+- Navigate to Monitors → New Monitor → Metric.
+- Choose the metric and set threshold alerts.

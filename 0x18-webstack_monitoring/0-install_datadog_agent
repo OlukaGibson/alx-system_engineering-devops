@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Installs Datadog agent on Ubuntu 16.04 and sets API key
+
+if [ -z "$DD_API_KEY" ]; then
+  echo "Error: DD_API_KEY environment variable is not set"
+  exit 1
+fi
+
+# Add Datadog's apt repo and key
+DD_AGENT_MAJOR_VERSION=7
+OS=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
+RELEASE=$(lsb_release -cs)
+echo "deb https://apt.datadoghq.com/ stable main" | sudo tee /etc/apt/sources.list.d/datadog.list
+sudo apt-get install -y apt-transport-https
+sudo apt-get update
+sudo apt-get install -y datadog-agent
+
+# Configure Datadog API key
+sudo sh -c "sed -i 's/api_key:.*/api_key: ${DD_API_KEY}/' /etc/datadog-agent/datadog.yaml"
+
+# Start agent
+sudo systemctl restart datadog-agent
+sudo systemctl enable datadog-agent
+
+echo "Datadog agent installed and started."
